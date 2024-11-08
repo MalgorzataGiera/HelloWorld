@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile  # Dockerfile dla serwera Nginx
+    ports:
+      - "8080:80"  # Przekieruj port 80 na 8080 dla frontend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend  # Ścieżka do plików backendu
+      dockerfile: Dockerfile  # Dockerfile dla backendu
+    ports:
+      - "3000:3000"  # Przekieruj port 3000 na 3000 dla backend
+    networks:
+      - app-network
+
+  db:
+    image: mysql:5.7  # Możesz zmienić na inną wersję MySQL, jeśli chcesz
+    environment:
+      MYSQL_ROOT_PASSWORD: example_password  # Hasło root
+      MYSQL_DATABASE: my_database  # Domyślna baza danych
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql  # Montowanie skryptu SQL
+    ports:
+      - "3306:3306"  # Przekieruj port MySQL
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
