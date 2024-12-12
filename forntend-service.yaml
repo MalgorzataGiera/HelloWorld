@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: frontend-service
+spec:
+  selector:
+    app: frontend  # Upewnij się, że etykieta w Deployment frontend jest zgodna
+  ports:
+    - protocol: TCP
+      port: 80        # Port, na którym usługa będzie dostępna
+      targetPort: 80  # Port kontenera, na którym działa aplikacja frontend
+  type: NodePort      # Możesz użyć NodePort, aby uzyskać dostęp do usługi z zewnątrz
